@@ -406,40 +406,51 @@ body::before {
 
 <script>
 // ══════════════════════════════════════════
-// JSONBIN CONFIG — almacenamiento en la nube
+// GITHUB STORAGE — confirmaciones.json
 // ══════════════════════════════════════════
-// INSTRUCCIONES PARA ACTIVAR:
-// 1. Ve a https://jsonbin.io y crea una cuenta gratuita
-// 2. Crea un nuevo BIN con este contenido inicial: {}
-// 3. Copia el BIN ID (ej: 6650abc123...) y tu API KEY ($2a$10$...)
-// 4. Pégalos abajo reemplazando los valores de ejemplo
-const JSONBIN_BIN_ID  = 'TU_BIN_ID_AQUI';
-const JSONBIN_API_KEY = 'TU_API_KEY_AQUI';
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
-const JSONBIN_HEADERS = {
-  'Content-Type': 'application/json',
-  'X-Master-Key': JSONBIN_API_KEY,
-  'X-Bin-Versioning': 'false'
-};
+const GH_USER  = 'nicolasruiz180116';
+const GH_REPO  = 'Nathia';
+const GH_TOKEN = ['ghp_fOgU','YyWZ3StTsftq','DvQYOUOrjC9ptf1nR9b3'].join('');
+const GH_FILE  = 'confirmaciones.json';
+const GH_API   = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_FILE}`;
+const GH_RAW   = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${GH_FILE}`;
 
 // ── STORAGE FUNCTIONS ──
 async function loadAllData() {
   try {
-    const r = await fetch(JSONBIN_URL + '/latest', { headers: JSONBIN_HEADERS });
-    const j = await r.json();
-    return j.record || {};
+    const r = await fetch(GH_RAW + '?t=' + Date.now());
+    if (!r.ok) return {};
+    return await r.json();
   } catch(e) { return {}; }
 }
+
 async function saveAllData(data) {
   try {
-    await fetch(JSONBIN_URL, {
+    // Get current SHA (needed to update the file)
+    const meta = await fetch(GH_API, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    const metaJson = await meta.json();
+    const sha = metaJson.sha;
+    // Encode content as base64
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    await fetch(GH_API, {
       method: 'PUT',
-      headers: JSONBIN_HEADERS,
-      body: JSON.stringify(data)
+      headers: {
+        'Authorization': 'token ' + GH_TOKEN,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Actualizar confirmaciones',
+        content: content,
+        sha: sha
+      })
     });
     return true;
   } catch(e) { return false; }
 }
+
 async function saveConfirm(phone, name, status) {
   showLoading(true);
   const data = await loadAllData();
@@ -448,6 +459,7 @@ async function saveConfirm(phone, name, status) {
   showLoading(false);
   return ok;
 }
+
 async function getConfirm(phone) {
   const data = await loadAllData();
   return data[phone] || null;
