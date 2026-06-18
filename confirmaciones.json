@@ -155,12 +155,6 @@
     "status": "si",
     "ts": "2026-06-16T04:06:43.005Z"
   },
-  "3160526560": {
-    "name": "Don Pablo & Doña Edith",
-    "phone": "3160526560",
-    "status": "no",
-    "ts": "2026-06-18T17:59:42.249Z"
-  },
   "3168699155": {
     "name": "Veronica & Sebastian",
     "phone": "3168699155",
@@ -178,6 +172,12 @@
     "phone": "3202147785",
     "status": "si",
     "ts": "2026-05-31T19:00:07.631Z"
+  },
+  "3205485155": {
+    "name": "Mauricio Jaramillo & Esposa",
+    "phone": "3205485155",
+    "status": "no",
+    "ts": "2026-06-18T18:00:11.785Z"
   },
   "3206997106": {
     "name": "Diana & esposo",
