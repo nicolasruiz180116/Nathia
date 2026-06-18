@@ -2,14 +2,14 @@
   "642275506": {
     "name": "Mauricio",
     "phone": "642275506",
-    "status": "si",
-    "ts": "2026-06-18T18:01:05.424Z"
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "695190495": {
     "name": "Juliana Tabares",
     "phone": "695190495",
-    "status": "si",
-    "ts": "2026-06-18T18:03:39.712Z"
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3000000000": {
     "name": "Adíela",
@@ -28,6 +28,12 @@
     "phone": "3002858436",
     "status": "si",
     "ts": "2026-06-18T16:58:02.588Z"
+  },
+  "3002278477": {
+    "name": "Yuri",
+    "phone": "3002278477",
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3003099639": {
     "name": "Marina & Carlos",
@@ -71,6 +77,12 @@
     "status": "si",
     "ts": "2026-05-31T20:36:39.091Z"
   },
+  "3105995229": {
+    "name": "Patricia",
+    "phone": "3105995229",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
+  },
   "3108615199": {
     "name": "Gilary",
     "phone": "3108615199",
@@ -89,6 +101,12 @@
     "status": "si",
     "ts": "2026-06-01T02:05:43.311Z"
   },
+  "3113922683": {
+    "name": "Santiago & Laura",
+    "phone": "3113922683",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
+  },
   "3117100431": {
     "name": "Ana & acompañante",
     "phone": "3117100431",
@@ -99,13 +117,19 @@
     "name": "Diana & Manuela",
     "phone": "3117113791",
     "status": "si",
-    "ts": "2026-06-18T17:08:14.126Z"
+    "ts": "2026-06-18T17:08:14.226Z"
   },
   "3117499739": {
     "name": "Jose Andres Jaramillo & familia",
     "phone": "3117499739",
     "status": "si",
     "ts": "2026-06-01T08:18:04.279Z"
+  },
+  "3122148513": {
+    "name": "Alba, Kelly e hija",
+    "phone": "3122148513",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3122243712": {
     "name": "Stiven & familia",
@@ -131,11 +155,23 @@
     "status": "si",
     "ts": "2026-06-18T17:01:13.411Z"
   },
+  "3127780379": {
+    "name": "Alberto, Yaneth & Gina",
+    "phone": "3127780379",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
+  },
   "3136725157": {
     "name": "Don Jorge, Doña Liliana & Familia",
     "phone": "3136725157",
     "status": "si",
     "ts": "2026-06-02T01:13:54.256Z"
+  },
+  "3136798823": {
+    "name": "Jhoan Mauricio e hijos",
+    "phone": "3136798823",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3136887835": {
     "name": "Yaneth & Alberto",
@@ -161,11 +197,29 @@
     "status": "si",
     "ts": "2026-05-31T20:18:47.335Z"
   },
+  "3148698991": {
+    "name": "Elizabeth",
+    "phone": "3148698991",
+    "status": "si",
+    "ts": "2026-06-18T21:00:00.000Z"
+  },
   "3154306656": {
     "name": "Aleja & Alex",
     "phone": "3154306656",
     "status": "si",
     "ts": "2026-06-16T04:06:43.005Z"
+  },
+  "3154499043": {
+    "name": "Andrea & Juan",
+    "phone": "3154499043",
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
+  },
+  "3160526560": {
+    "name": "Don Pablo & Doña Edith",
+    "phone": "3160526560",
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3168699155": {
     "name": "Veronica & Sebastian",
@@ -177,13 +231,19 @@
     "name": "Vanesa & familia",
     "phone": "3193776084",
     "status": "si",
-    "ts": "2026-06-18T17:42:41.051Z"
+    "ts": "2026-06-18T17:42:41.001Z"
   },
   "3202147785": {
     "name": "Nicolás",
     "phone": "3202147785",
     "status": "si",
     "ts": "2026-05-31T19:00:07.631Z"
+  },
+  "3205485155": {
+    "name": "Mauricio Jaramillo & Esposa",
+    "phone": "3205485155",
+    "status": "no",
+    "ts": "2026-06-18T21:00:00.000Z"
   },
   "3206997106": {
     "name": "Diana & esposo",
