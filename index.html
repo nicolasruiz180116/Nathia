@@ -263,20 +263,16 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <p class="stat-people" id="stat-people-text"></p>
     <p class="admin-note">Toca el estado para cambiarlo manualmente</p>
     <div class="sort-bar">
-      <button class="sort-btn active" id="sb-alpha" onclick="setSortMode('alpha')">A–Z</button>
-      <button class="sort-btn" id="sb-yes" onclick="setSortMode('yes')">✓ Confirmados</button>
-      <button class="sort-btn" id="sb-no" onclick="setSortMode('no')">✗ No asisten</button>
-      <button class="sort-btn" id="sb-wait" onclick="setSortMode('wait')">⏳ Pendientes</button>
-      <button class="sort-btn" id="sb-count" onclick="setSortMode('count')"># Personas</button>
+      <button class="sort-btn active" id="sb-all" onclick="setFilter('all')">Todos</button>
+      <button class="sort-btn" id="sb-yes" onclick="setFilter('yes')">✓ Confirmados</button>
+      <button class="sort-btn" id="sb-no" onclick="setFilter('no')">✗ No asisten</button>
+      <button class="sort-btn" id="sb-wait" onclick="setFilter('wait')">⏳ Pendientes</button>
     </div>
     <table class="admin-table">
-      <thead>
-        <tr>
-          <th onclick="cycleSort('name')">Invitado <span class="sort-icon" id="th-name">↕</span></th>
-          <th onclick="cycleSort('count')" style="text-align:center">Personas <span class="sort-icon" id="th-count">↕</span></th>
-          <th onclick="cycleSort('status')" style="text-align:right">Estado <span class="sort-icon" id="th-status">↕</span></th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th>Invitado (personas)</th>
+        <th style="text-align:right">Estado</th>
+      </tr></thead>
       <tbody id="guest-list-rows"></tbody>
     </table>
     <button class="admin-refresh" onclick="loadAdminData()">↻ Actualizar</button>
@@ -526,33 +522,59 @@ function closeAdmin(){
 }
 document.getElementById('admin-pass-input').addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
 
+let _adminData={};
+let _filterMode='all';
+
 async function loadAdminData(){
   showLoading(true);
-  const data=await loadAllData();
+  _adminData=await loadAllData();
   showLoading(false);
-  const phones=Object.keys(GUESTS);
-  let yesCount=0,noCount=0,yPeople=0,html='';
-  phones.forEach(phone=>{
-    const g=GUESTS[phone],c=data[phone];
-    let pill,lbl;
-    if(!c){pill='status-wait';lbl='Pendiente';}
-    else if(c.status==='si'){pill='status-yes';lbl='Confirmado';yesCount++;yPeople+=g.count||1;}
-    else{pill='status-no';lbl='No asiste';noCount++;}
-    const ts=c?'· '+new Date(c.ts).toLocaleString('es-CO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
-    html+=`<div class="guest-row">
-      <div class="guest-row-info">
-        <div class="guest-row-name">${g.name}</div>
-        <div class="guest-row-meta">${phone} ${ts}</div>
-      </div>
-      <span class="status-pill ${pill}" onclick="adminToggle('${phone}','${c?c.status:''}','${g.name.replace(/'/g,"\'")}')">${lbl}</span>
-    </div>`;
+  renderAdminTable();
+}
+
+function setFilter(mode){
+  _filterMode=mode;
+  ['all','yes','no','wait'].forEach(m=>{
+    const el=document.getElementById('sb-'+m);
+    if(el) el.classList.toggle('active', m===mode);
   });
-  document.getElementById('stat-total').textContent=phones.length;
+  renderAdminTable();
+}
+
+function renderAdminTable(){
+  const data=_adminData;
+  let rows=[];
+  let yesCount=0,noCount=0,waitCount=0,yPeople=0;
+  const totalPeople=Object.values(GUESTS).reduce((s,g)=>s+(g.count||1),0);
+
+  Object.keys(GUESTS).forEach(phone=>{
+    const g=GUESTS[phone],c=data[phone];
+    let statusKey,pill,lbl;
+    if(!c){statusKey='wait';pill='status-wait';lbl='Pendiente';waitCount++;}
+    else if(c.status==='si'){statusKey='yes';pill='status-yes';lbl='Confirmado';yesCount++;yPeople+=g.count||1;}
+    else{statusKey='no';pill='status-no';lbl='No asiste';noCount++;}
+    rows.push({phone,name:g.name,count:g.count||1,statusKey,pill,lbl,rawStatus:c?c.status:'',ts:c?c.ts:null});
+  });
+
+  rows.sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  if(_filterMode!=='all') rows=rows.filter(r=>r.statusKey===_filterMode);
+
+  let tableHtml='';
+  rows.forEach(r=>{
+    const ts=r.ts?' · '+new Date(r.ts).toLocaleString('es-CO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+    tableHtml+=`<tr>
+      <td><div class="td-name">${r.name} <span style="font-family:'Raleway',sans-serif;font-size:0.78rem;color:rgba(201,169,110,0.75);font-style:normal;">(${r.count})</span></div><div class="td-meta">${r.phone}${ts}</div></td>
+      <td class="td-status"><span class="status-pill ${r.pill}" onclick="adminToggle('${r.phone}','${r.rawStatus}','${r.name.replace(/'/g,"\'")}')">${r.lbl}</span></td>
+    </tr>`;
+  });
+
+  document.getElementById('stat-total').textContent=Object.keys(GUESTS).length;
   document.getElementById('stat-yes').textContent=yesCount;
   document.getElementById('stat-no').textContent=noCount;
-  document.getElementById('stat-people-text').textContent=`${yPeople} personas confirmadas de ${Object.values(GUESTS).reduce((s,g)=>s+(g.count||1),0)} esperadas`;
-  document.getElementById('guest-list-rows').innerHTML=html;
+  document.getElementById('stat-people-text').textContent=`${yPeople} personas confirmadas de ${totalPeople} esperadas`;
+  document.getElementById('guest-list-rows').innerHTML=tableHtml;
 }
+
 async function adminToggle(phone,currentStatus,name){
   const next=currentStatus==='si'?'no':'si';
   showLoading(true);
